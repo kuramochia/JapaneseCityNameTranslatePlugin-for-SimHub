@@ -1,0 +1,14 @@
+@apikey=
+@region=japaneast
+@cityName=TOkyo
+POST https://api.cognitive.microsofttranslator.com/translate?api-version=3.0&to=ja-JP
+Content-Type: application/json; charset=UTF-8
+Ocp-Apim-Subscription-Key: {{apikey}}
+Ocp-Apim-Subscription-Region: {{region}}
+[
+    {
+        "Text": "{{cityName}}"
+    }
+]
+
+###
