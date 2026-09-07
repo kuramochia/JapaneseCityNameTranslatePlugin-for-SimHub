@@ -138,7 +138,7 @@ namespace Kuramochia.JapaneseCityNamePlugin
             {
                 request.Headers.Add("Ocp-Apim-Subscription-Key", _plugin.Settings.Secrets);
                 request.Headers.Add("Ocp-Apim-Subscription-Region", _plugin.Settings.Region);
-                request.Content = new StringContent($"[{{\"text\": \"{cityName}\"}}]", System.Text.Encoding.UTF8, "application/json");
+                request.Content = new StringContent($"[{{\"text\": \"City name:'{cityName}'\"}}]", System.Text.Encoding.UTF8, "application/json");
 
                 try
                 {
@@ -152,7 +152,16 @@ namespace Kuramochia.JapaneseCityNamePlugin
                         // translations 配列の先頭要素の text のみを取得する
                         var translatedResult = JArray.Parse(jsonResponse);
                         var translatedCityName = translatedResult[0]?["translations"]?[0]?["text"]?.Value<string>() ?? cityName;
-
+                        // "「" より前と、"」" より後を削除して、純粋な都市名だけを返す。"都市名:「ホワイトフィールド」" のような形式で返ってくるため。
+                        if (translatedCityName.Contains("「") && translatedCityName.Contains("」"))
+                        {
+                            int startIndex = translatedCityName.IndexOf("「") + 1;
+                            int endIndex = translatedCityName.IndexOf("」");
+                            if (startIndex < endIndex)
+                            {
+                                translatedCityName = translatedCityName.Substring(startIndex, endIndex - startIndex);
+                            }
+                        }
                         return new Tuple<string, string>(cityName, translatedCityName);
                     }
                 }
