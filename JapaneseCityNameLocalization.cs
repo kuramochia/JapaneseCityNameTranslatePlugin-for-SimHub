@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Net.Http.Headers;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Kuramochia.JapaneseCityNamePlugin
@@ -11,6 +11,9 @@ namespace Kuramochia.JapaneseCityNamePlugin
     {
         private const string JobCitySourcePropertyName = "Job.CitySource";
         private const string JobCityDestinationPropertyName = "Job.CityDestination";
+
+        // 正規表現をコンパイルしてパフォーマンス向上
+        private static readonly Regex compiledRegEx = new Regex(@"都市名\s*[:：]\s*.*?(?<value>[^『』「」『「』」（）]+)", RegexOptions.Compiled | RegexOptions.Singleline);
 
         private readonly JapaneseCityNamePlugin _plugin;
 
@@ -153,14 +156,10 @@ namespace Kuramochia.JapaneseCityNamePlugin
                         var translatedResult = JArray.Parse(jsonResponse);
                         var translatedCityName = translatedResult[0]?["translations"]?[0]?["text"]?.Value<string>() ?? cityName;
                         // "「" より前と、"」" より後を削除して、純粋な都市名だけを返す。"都市名:「ホワイトフィールド」" のような形式で返ってくるため。
-                        if (translatedCityName.Contains("「") && translatedCityName.Contains("」"))
+                        var match = compiledRegEx.Match(translatedCityName);
+                        if (match.Success)
                         {
-                            int startIndex = translatedCityName.IndexOf("「") + 1;
-                            int endIndex = translatedCityName.IndexOf("」");
-                            if (startIndex < endIndex)
-                            {
-                                translatedCityName = translatedCityName.Substring(startIndex, endIndex - startIndex);
-                            }
+                            translatedCityName = match.Groups["value"].Value;
                         }
                         return new Tuple<string, string>(cityName, translatedCityName);
                     }
