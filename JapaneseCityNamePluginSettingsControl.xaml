@@ -27,7 +27,7 @@
                     <TextBox x:Name="regionTextBox"/>
                 </styles:SHSubSection>
                 <styles:SHSubSection Title="Secrets">
-                    <TextBox x:Name="secretsTextBox"/>
+                    <PasswordBox x:Name="secretsTextBox"/>
                 </styles:SHSubSection>
                 <styles:SHSubSection
                         Title="使い方">
