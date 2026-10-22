@@ -21,14 +21,14 @@ namespace Kuramochia.JapaneseCityNamePlugin
             this.Plugin = plugin;
             urlTextBox.Text = plugin.Settings.Url;
             regionTextBox.Text = plugin.Settings.Region;
-            secretsTextBox.Text = plugin.Settings.Secrets;
+            secretsTextBox.Password = plugin.Settings.Secrets;
         }
 
         private void updateButton_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             this.Plugin.Settings.Url = urlTextBox.Text;
             this.Plugin.Settings.Region = regionTextBox.Text;
-            this.Plugin.Settings.Secrets = secretsTextBox.Text;
+            this.Plugin.Settings.Secrets = secretsTextBox.Password;
             this.Plugin.Save();
             MessageBox.Show("Settings updated successfully!", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
         }
