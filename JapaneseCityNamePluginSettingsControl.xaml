@@ -44,6 +44,19 @@
                             <Run>URL(通常は変更不要)、Region、Secrets を設定し、「設定保存」ボタンをクリックしてください。</Run>
                     </TextBlock>
                 </styles:SHSubSection>
+                <styles:SHSectionSeparator/>
+                <styles:SHButtonPrimary x:Name="maintenanceJson" Content="Json の手動編集" Click="maintenanceJson_Click"/>
+                <styles:SHButtonPrimary x:Name="reloadJson" Content="設定を再読み込み" Click="reloadJson_Click"/>
+                <styles:SHSubSection
+                        Title="手動修正">
+                    <TextBlock>
+                            <Run>望まない翻訳が出てしまった場合、Json ファイルを手動で編集してください。</Run>
+                            <LineBreak/>
+                            <Run>「Json の手動編集」ボタンをクリックすると、Json ファイルを開くことができます。</Run>
+                            <LineBreak/>
+                            <Run>任意のテキストエディタにて修正、保存後に、「設定を再読み込み」ボタンをクリックしてください。</Run>
+                    </TextBlock>
+                </styles:SHSubSection>
             </StackPanel>
         </styles:SHSection>
     </ScrollViewer>

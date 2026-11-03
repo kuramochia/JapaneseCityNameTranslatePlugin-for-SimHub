@@ -10,6 +10,7 @@ namespace Kuramochia.JapaneseCityNamePlugin
     [PluginAuthor("kuramochia")]
     public class JapaneseCityNamePlugin : IPlugin, IDataPlugin, IWPFSettingsV2
     {
+        internal const string SettingsName = "Settings";
         public JapaneseCityNamePluginSettings Settings;
         public CancellationTokenSource EndTokenSource = new CancellationTokenSource();
 
@@ -47,7 +48,15 @@ namespace Kuramochia.JapaneseCityNamePlugin
 
         public void Save()
         {
-            this.SaveCommonSettings("Settings", Settings);
+            this.SaveCommonSettings(SettingsName, Settings);
+        }
+
+        public string GetPluginJsonPath()
+            => PluginManager.GetCommonStoragePath(this.GetType().Name + "." + SettingsName + ".json");
+
+        public void LoadSettings()
+        {
+            Settings = this.ReadCommonSettings<JapaneseCityNamePluginSettings>(SettingsName, () => new JapaneseCityNamePluginSettings());
         }
 
         /// <summary>
@@ -64,8 +73,7 @@ namespace Kuramochia.JapaneseCityNamePlugin
         /// <param name="pluginManager"></param>
         public void Init(PluginManager pluginManager)
         {
-            // Load settings
-            Settings = this.ReadCommonSettings<JapaneseCityNamePluginSettings>("Settings", () => new JapaneseCityNamePluginSettings());
+            LoadSettings();
             _localization = new JapaneseCityNameLocalization(this);
         }
 
